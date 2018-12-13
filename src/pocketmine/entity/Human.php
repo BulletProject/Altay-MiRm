@@ -35,7 +35,6 @@ use pocketmine\inventory\EnderChestInventory;
 use pocketmine\inventory\Inventory;
 use pocketmine\inventory\InventoryHolder;
 use pocketmine\inventory\PlayerInventory;
-use pocketmine\inventory\InventoryHolder;
 use pocketmine\item\Consumable;
 use pocketmine\item\Durable;
 use pocketmine\item\enchantment\Enchantment;
