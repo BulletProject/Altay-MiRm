@@ -24,8 +24,7 @@ declare(strict_types=1);
 namespace pocketmine\entity;
 
 use pocketmine\block\Block;
-use pocketmine\entity\object\LeashKnot;
-use pocketmine\entity\projectile\Projectile;
+use pocketmine\event\entity\EntityArmorChangeEvent;
 use pocketmine\event\entity\EntityDamageByChildEntityEvent;
 use pocketmine\event\entity\EntityDamageByEntityEvent;
 use pocketmine\event\entity\EntityDamageEvent;
@@ -33,7 +32,7 @@ use pocketmine\event\entity\EntityDeathEvent;
 use pocketmine\event\entity\EntityEffectAddEvent;
 use pocketmine\event\entity\EntityEffectRemoveEvent;
 use pocketmine\inventory\ArmorInventory;
-use pocketmine\inventory\ArmorInventoryEventProcessor;
+use pocketmine\inventory\Inventory;
 use pocketmine\item\Armor;
 use pocketmine\item\Consumable;
 use pocketmine\item\Durable;
@@ -139,7 +138,15 @@ abstract class Living extends Entity implements Damageable{
 
 		$this->armorInventory = new ArmorInventory($this);
 		//TODO: load/save armor inventory contents
-		$this->armorInventory->setEventProcessor(new ArmorInventoryEventProcessor($this));
+		$this->armorInventory->setSlotChangeListener(function(Inventory $inventory, int $slot, Item $oldItem, Item $newItem) : ?Item{
+			$ev = new EntityArmorChangeEvent($this, $oldItem, $newItem, $slot);
+			$ev->call();
+			if($ev->isCancelled()){
+				return null;
+			}
+
+			return $ev->getNewItem();
+		});
 
 		$health = $this->getMaxHealth();
 
