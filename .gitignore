@@ -6,7 +6,6 @@ timings/*
 crashdumps/*
 *.log
 *.txt
-*.phar
 server.properties
 /pocketmine.yml
 /altay.yml
